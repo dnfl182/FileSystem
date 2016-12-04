@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "Util.h"
 #define DATABLOCK_SIZE 1024
 #define DATABLOCK_CHARSIZE SIZETOCHAR(DATABLOCK_SIZE)
 #define INODE_SIZE 512
@@ -66,6 +67,7 @@ typedef struct Time_
 	int sec;	
 }Time;
 
+// NO test
 void initFileSystem(FileSystem ** address);
 void initDataBlock(DataBlock ** address);
 void initInode(Inode ** address);
