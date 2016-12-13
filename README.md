@@ -1,1 +1,6 @@
-﻿# 정말 재미있는 플밍 파일시스템 프로젝트
+# Funny Project
+
+
+FileSystme : Jeon Byeong Mo
+Shall      : Yang gi chang
+Command    : Lee do hyeon
