@@ -1,23 +1,23 @@
 #include "Util.h"
-int getBit(void * buffer,int n)	//buf 에잇는 n 번째 비트를 얻어온다 
+int getBit(void * buffer,int n)	//get nTh Bit in Buffer 
 {
 	char *buf = (char*)buffer;
-	int arrayNumber = n / 8;	// char buf 배열의 arrayNumber번쨰 위치 
-	int rNumber = n % 8;		//	위내용의에 있는 rNumber번째 비트 
+	int arrayNumber = n / 8;	//	there is bit in n/8 array 
+	int rNumber = n % 8;		//	setting mask 
 	char mask;
 	
 	mask = (1 << (7 - rNumber));
-	if(buf[arrayNumber] & mask)	// 0 보다 크면 1 
+	if(buf[arrayNumber] & mask)	// getInfo
 		return 1;
-	else			//아니면 0 
+	else		
 		return 0;
 }
-void setBit(void * buffer,int n,int value)	//buf 에 있는 n 번째 비트에 value 저장 
+void setBit(void * buffer,int n,int value)	//set nth Bit in buffer as n 
 {
 	
 	char *buf = (char*)buffer;
-	int arrayNumber = n / 8;	// char buf 배열의 arrayNumber번쨰 위치 
-	int rNumber = n % 8;		//	위내용의에 있는 rNumber번째 비트
+	int arrayNumber = n / 8;
+	int rNumber = n % 8;
 	char mask;
 	mask = 1 << (7 - rNumber);
 	if(value == 1)
@@ -25,7 +25,7 @@ void setBit(void * buffer,int n,int value)	//buf 에 있는 n 번째 비트에 value 저�
 	else
 		buf[arrayNumber] &= (~mask);	// NAND 
 }
-int stringToInt(char * str)	//문자열을 숫자로 바꿔주는 것 
+int stringToInt(char * str)	//interpret char* to int 
 {
 	int len = strlen(str);
 	int i  = 0;
@@ -38,8 +38,7 @@ int stringToInt(char * str)	//문자열을 숫자로 바꿔주는 것
 	}
 	return r;
 }
-//source : 소스 target : 타겟 fromTarget : 타겟에서 몇비트 떨어진 부분부터 시작
-//fromSource : 소스에서 몇비트 떨어진 부분부터 시작 n 개를 
+//Copy nthBit from source to target
 void copyBit(void * targetVoid , void * sourceVoid,int fromTarget,int fromSource, int n)
 {
 	char * target = (char*)targetVoid;
@@ -63,13 +62,14 @@ int isEmptyBuffer(void * buffer , int nBit)
 		}
 	return r;
 }
+//only test
 void printBit(void * source , int from , int n)
 {
 	int i = 0;
-	while(i < n)
+	for(i = 0 ; i < n; i++)
 	{
-		printf("%d ",getBit(source,i++ + from));
-		if(i % 8 == 0)
+		printf("%d ",getBit(source,i + from));
+		if(i % 8 == 7)
 		{
 			printf("\n");
 		}
