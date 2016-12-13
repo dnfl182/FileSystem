@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
 #include "Util.h"
 #define DATABLOCK_SIZE 1024
 #define DATABLOCK_CHARSIZE SIZETOCHAR(DATABLOCK_SIZE)
@@ -12,8 +14,8 @@
 #define DATABLOCK_BITE 128
 #define MAX_INDIRECT 102
 
-typedef struct FileSystem_ FileSystem;	// 파일 시스템 
-typedef struct Inode_ Inode;			// 아이노드 
+typedef struct FileSystem_ FileSystem; 
+typedef struct Inode_ Inode;			
 typedef struct DataBlock_ DataBlock;	
 typedef struct SuperBlock_ SuperBlock;
 typedef struct Time_ Time;
@@ -29,14 +31,13 @@ typedef struct FileSystem_
 typedef struct Inode_
 {
 	int num;
-	bool type;
+	char type;	// 0 : File 1 : Directory
 	Time *lastUsedTime;
 	int size;
 	DataBlockList * data;
 }Inode;
 typedef struct DataBlock_
 {
-	int plus;
 	int num;
 	char data[DATABLOCK_BITE];	
 }DataBlock;
@@ -67,34 +68,25 @@ typedef struct Time_
 	int sec;	
 }Time;
 
-// NO test
 void initFileSystem(FileSystem ** address);
 void initDataBlock(DataBlock ** address);
 void initInode(Inode ** address);
 void initSuperBlock(SuperBlock ** address);
-
-void addDataBlockList(Inode * inode, DataBlock * data);
-DataBlock * getEmptyDataBlock(FileSystem * fileSystem);	//비어 있는 데이터 블럭 얻기
-Inode * getEmptyInode(FileSystem * fileSystem);	//비어잇는 아이노드 얻어오기
-
-
+void renewTime(Time * t);
+void printTime(Time * t);
+DataBlock * getEmptyDataBlock(FileSystem * fileSystem);
+Inode * getEmptyInode(FileSystem * fileSystem);
+void freeDataBlock(FileSystem * fileSystem , int num);
+void freeInode(FileSystem * fileSystem , int num);
 void initDataBlockList(DataBlockList ** address);
-//데이터 리스트에 데이터 노드 넣는 함수 
 void pushDataBlockList(DataBlockList * list, DataBlock * dataBlock);
-// 싱글 인다이렉트 블럭 생성 
 void makeSingleIndirect(FileSystem * fileSystem , Inode * inode);
-// 더블 인다이렉트 블럭 생성 
 void makeDoubleIndirect(FileSystem * fileSystem , Inode * inode);
-// 인다이렉트 데이터 블럭에서 데이터블럭 얻어오기 
 DataBlock * getDataBlockIndirect(FileSystem * fileSystem , DataBlock * dataBlock , int n);
-// 인다이렉트 데이터 블럭에 노드 번호 저장하기 
 void setDataBlockIndirect(DataBlock * dataBlock , int n , int num);
-//아이노드에 데이터블럭 저장하기 
 void pushDataBlockInode(FileSystem * fileSystem ,Inode * inode , DataBlock *dataBlock);
-// 아이노드 에서 n번째 데이터 얻어오기 
 DataBlock * getDataBlockInode(FileSystem * fileSystem , Inode * inode , int n);
-char * getDataInode(FileSystem * fileSystem , Inode * inode , int fromBit,  int nBit);	//fromBit 부터 nBit만큼의 데이터 얻기 
-
+char * getDataInode(FileSystem * fileSystem , Inode * inode , int fromBit,  int nBit);
 void setDataInode(FileSystem * fileSystem, Inode * inode, int fromBit, int nBit, int fromSourceBit ,void * source);
-
+int getRealSize(Inode * inode);
 #endif
